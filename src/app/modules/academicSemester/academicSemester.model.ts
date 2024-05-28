@@ -1,26 +1,10 @@
 import { Schema, model } from 'mongoose';
-import { TAcademicSemester, TAcademicSemesterCode, TAcademicSemesterName, TMonths } from './academicSemester.interface';
+import { TAcademicSemester } from './academicSemester.interface';
+import { AcademicSemesterCode, AcademicSemesterName, Months } from './academicSemester.constant';
 
 
 
-const Months : TMonths[] = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-  ]
 
-  const AcademicSemesterName: TAcademicSemesterName[] = ['Autumn','Summer', 'Fall'];
-
-  const  AcademicSemesterCode : TAcademicSemesterCode[] =  ['01', '02','03']
 
 
 const academicSemesterSchema = new Schema<TAcademicSemester>({
@@ -31,7 +15,7 @@ const academicSemesterSchema = new Schema<TAcademicSemester>({
     enum : AcademicSemesterName
   },
   year: {
-    type: Date,
+    type: String,
     required: true,
   },
   code : {
@@ -52,6 +36,17 @@ const academicSemesterSchema = new Schema<TAcademicSemester>({
 }, { timestamps: true});
 
 
+// use moongose pre hook middleware 
+academicSemesterSchema.pre('save', async function(next){
+  const isSemesterExist = await AcademicSemester.findOne({
+    year: this.year,
+    name : this.name,
+  });
+  if(isSemesterExist){
+    throw new Error('Semester is already exists')
+  }
+  next()
+})
 
 
 

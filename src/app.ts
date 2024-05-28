@@ -2,8 +2,6 @@ import express, { Request, Response, Application, NextFunction } from 'express';
 const app: Application = express();
 const port = 3000;
 import cors from 'cors';
-import { StudentRoutes } from './app/modules/student/student.route';
-import { UserRoutes } from './app/modules/user/user.route';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import notFound from './app/middlewares/notFound';
 import router from './app/routes';
